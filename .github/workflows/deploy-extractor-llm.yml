@@ -25,13 +25,13 @@ env:
   DEPLOYER_SA: ${{ vars.DEPLOYER_SA }}
   WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
   LLM_PROVIDER: ${{ vars.LLM_PROVIDER || 'vertex' }}
-  LLM_MODEL: ${{ vars.LLM_MODEL || 'gemini-2.5-flash' }} # <-- CHANGE HERE
+  LLM_MODEL: gemini-3.8-flash
+  VERTEX_LOCATION: global
   LLM_OVERWRITE: ${{ vars.LLM_OVERWRITE || 'false' }}
   LLM_MAX_FILES: ${{ vars.LLM_MAX_FILES || '0' }}
   LLM_STRUCTURED_PREFIX: ${{ vars.STRUCTURED_PREFIX || 'structured' }}
   SCHEDULE_BODY: ${{ vars.EXTRACTOR_LLM_BODY || '{"overwrite":false,"max_files":0}' }}
   CRON_EXPR: "12 * * * *"
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -91,7 +91,7 @@ jobs:
             --no-allow-unauthenticated \
             --memory=1024Mi \
             "${SA_ARGS[@]}" \
-            --set-env-vars="PROJECT_ID=${PROJECT_ID},GCS_BUCKET=${BUCKET_NAME},STRUCTURED_PREFIX=${LLM_STRUCTURED_PREFIX},LLM_PROVIDER=${LLM_PROVIDER},LLM_MODEL=${LLM_MODEL},OVERWRITE=${LLM_OVERWRITE},MAX_FILES=${LLM_MAX_FILES}"
+            --set-env-vars="PROJECT_ID=${PROJECT_ID},GCS_BUCKET=${BUCKET_NAME},STRUCTURED_PREFIX=${LLM_STRUCTURED_PREFIX},LLM_PROVIDER=${LLM_PROVIDER},LLM_MODEL=${LLM_MODEL},VERTEX_LOCATION=${VERTEX_LOCATION},OVERWRITE=${LLM_OVERWRITE},MAX_FILES=${LLM_MAX_FILES}"
 
       - name: Get Function URL
         id: cfurl
